@@ -7,6 +7,7 @@ IBRAR, Created file, 06/14/2021
 # !/usr/bin/env python3
 import sys
 import csv
+from collections import defaultdict
 from datetime import datetime, date, timedelta
 
 class IO:
@@ -113,8 +114,48 @@ class IO:
         return order
 
     @staticmethod
-    def print_order_history(list_of_rows: list):
-        """ Print the current items in the Order History
+    def print_report(dict_to_be_printed):
+        headers = list(dict_to_be_printed["1"].keys())
+        order_table = [headers]
+        for keys, values in dict_to_be_printed.items():
+            order_table.append([values[header] for header in headers])
+        column_width = [max(map(len, column)) for column in zip(*order_table)]
+        table_format = " ".join(["{{:<{}}}".format(i) for i in column_width])
+        for row in order_table:
+            print(table_format.format(*row))
 
-        :param list_of_rows: (list) of rows you want to display
-        """
+
+class FileProcessor:
+    """Processes data to and from a file and a dictionary of objects:"""
+
+    @staticmethod
+    def save_data_to_file(file_name, dict_of_orders):
+        """ Write data to a file from a dictionary of orders """
+        try:
+            headings = list(dict_of_orders["1"].keys())
+            with open(file_name, 'w', newline='') as file:
+                w = csv.DictWriter(file, fieldnames = headings)
+                w.writeheader()
+                for k, v in dict_of_orders.items():
+                    w.writerow(v)
+        except KeyError:
+            print("There are no orders currently!")
+        return "Data saved successfully!"
+
+    @staticmethod
+    def read_data_from_file(file_name):
+        """ Write data to a file from a dictionary of orders """
+        order_dict = {}
+        with open(file_name, 'r') as file:
+            data = csv.reader(file, delimiter=",")
+            headers = next(data)[0:]
+            for row in data:
+                temp_dict = {}
+                order_id = row[0]
+                values = []
+                for x in row[0:]:
+                    values.append(x)
+                for i in range(len(values)):
+                    temp_dict[headers[i]] = values[i]
+                order_dict[order_id] = temp_dict
+        return order_dict
