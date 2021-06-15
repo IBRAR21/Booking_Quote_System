@@ -1,0 +1,4 @@
+order_id,shipment_priority,customer_name,package_description,package_contents,package_weight,package_volume,delivery_date,air_shipment_cost,truck_shipment_cost,ocean_shipment_cost
+1,Urgent,Xyz,Ipod,Safe,0.5,0.5,2021-06-18,$10.00,$45,NA
+2,Normal,Xyz,Ipad,Safe,5.0,4.0,2021-06-25,$80.00,$25,$30
+3,Urgent,Abc,Iphone,Dangerous,1.0,1.0,2021-06-18,NA,$45,NA
